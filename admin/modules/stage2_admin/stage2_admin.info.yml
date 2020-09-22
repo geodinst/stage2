@@ -1,0 +1,17 @@
+name: Stage2 administration
+description: Administration pages for Stage2 application.
+package: GIS
+
+type: module
+core: 8.x
+
+dependencies:
+  - GiServices
+  - language
+  - menu_trail_by_path
+
+#hidden: true
+
+# Note: do not add the 'version'  property yourself!
+# It will be added automatically by the packager on drupal.org.
+#version: 1.0

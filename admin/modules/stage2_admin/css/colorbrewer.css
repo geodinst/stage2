@@ -1,0 +1,22 @@
+.paletteBrewerDisplay{
+	display:inline-block !important;
+}
+
+.paletteSelection{
+	width: 0;
+	height: 0;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-right:10px solid black;
+	display: none;
+	float: left;
+}
+
+#colorBrewerContainer{
+	overflow: auto;
+	padding: 10px;
+	height: 200px;
+	border: solid 1px;
+	margin-right: 10px;
+	width:110px;
+}

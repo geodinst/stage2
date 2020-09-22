@@ -1,0 +1,3 @@
+services:
+  gi_services:
+    class: Drupal\GiServices\GiServices

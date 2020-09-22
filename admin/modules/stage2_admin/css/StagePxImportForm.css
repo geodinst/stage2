@@ -1,0 +1,11 @@
+#dates_container input {
+  vertical-align: bottom;
+  position: relative;
+  top: -1px;
+}
+
+#dates_container .form-item {
+  margin-top:0;
+  margin-bottom:0;
+  margin-left: 0.5em;
+}

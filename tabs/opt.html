@@ -1,0 +1,66 @@
+<div id="tree_menu_tab_title" class="tab-title">
+	<div id="selected-variable"></div>
+</div>
+<div id="static_content_popup" class = "side-popup">
+	<ul>
+		<li>
+			<a id="back_toinfo"><button type="button" class = "style_button style_buttonBack"><%=t['Back']%></button></a>
+		</li>
+	</ul>
+</div>
+<div id="options_container" class="u-vmenu">
+
+
+
+			<ul id="share_list_menu" >
+
+				<li>
+					<a><%=t['Classification']%></a>
+					<ul id= "classification_list_element">
+						<li><div id="class_count" class="select"></div></li>
+						<li><div id="class_method" class="select"></div></li>
+						<li>
+							<div id="settings-legend"></div>
+						</li>
+						<li>
+							<div id="interval-editor"></div>
+						</li>
+						<li>
+							<button type="button" id="apply_style_settings" class = "style_button"><%=t['Apply settings']%></button>
+						</li>
+						<li>
+							<button type="button" id="reset_legend_settings" class = "style_button"><%=t['Reset settings']%></button>
+						</li>
+					</ul>
+				</li>
+
+				<li id="unclassified">
+					<a><%=t['Unclassified values']%></a>
+					<ul id= "unclassified-container">
+					</ul>
+				</li>
+				<li id="available_colors">
+					<a><%=t['Colors']%></a>
+					<ul id= "colors_list_element">
+					</ul>
+					<ul id= "inverse_colors_list_element">
+						<li>
+							<input type="checkbox" name = "map_export_options" class="switch_1" id="inverse_colors_checkbox"> <label><%=t['Reverse color order']%></label>
+						</li>
+					</ul>
+				</li>
+
+				<li id="transparency">
+					<a><%=t['Transparency']%></a>
+					<ul id= "transparency_list_element">
+						<li>
+							<div id="div_ul_slider">
+								<div id="transparency_slider"></div>
+							</div>
+						</li>
+					</ul>
+				</li>
+
+			</ul>
+	</ul>
+</div>

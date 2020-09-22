@@ -1,0 +1,19 @@
+.acronym_not_found  {
+  background-color: #fdf8ed;
+}
+.acronym_found  {
+  background: #dcecf5 !important;
+}
+.input_disabled{
+	background-color: #dddddd;
+}
+.input_disabled_no_text{
+	background-color: #dddddd;
+}
+
+pre {
+  outline: 1px solid #ccc;
+  padding: 5px;
+  margin: 5px;
+  height: 8em;
+}

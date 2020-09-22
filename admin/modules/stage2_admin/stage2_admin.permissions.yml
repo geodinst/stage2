@@ -1,0 +1,4 @@
+'stage2_admin content_administrator':
+  title: 'stage2_admin content_administrator'
+  description: 'Administer stage content.'
+  restrict access: true

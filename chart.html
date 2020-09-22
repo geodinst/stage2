@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+</head>
+<body>
+<canvas id="canvas" width="400" height="400"></canvas>
+</body>
+<script src="lib/Chart.bundle.js"></script>
+<script src="lib/require.js"></script>
+<script src="lib/jquery-3.1.1.min.js"></script>
+<!-- <script src="lib/Chart.bundle.js"></script> -->
+<script>
+
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
+// console.log(cid);
+// var cid = getUrlParameter('cid');
+
+var url = new URL(window.location.href);
+var cid = url.searchParams.get("cid");
+var width = url.searchParams.get("width");
+var height = url.searchParams.get("height");
+
+var canvas = $('#canvas')[0];
+if (width && height){
+  canvas.width  = width;
+  canvas.height = height;
+}
+var ctx = document.getElementById("canvas").getContext('2d');
+
+var chart_options = {
+  scaleStartValue: 0,
+
+  tooltips: {
+    enabled: false,
+  },
+  scales: {
+    xAxes: [{
+      ticks: {
+        beginAtZero: true
+      }
+    }]
+  },
+  legend: {
+    display: false
+  },
+};
+
+
+require(['js/utils','locale'],function(U,locale){
+    U.get(locale.s2c+'gecd',{cid:cid},function(data){
+
+
+
+      var labels = [];
+      var dataset = [];
+      var backgroundColor = [];
+
+      $.each($.parseJSON(data), function(accordion_id, item) {
+        if (item != null){
+          labels.push(item.label);
+          dataset.push(item.value);
+          if (typeof item.color !== null) {
+            backgroundColor.push(parseColorOBJ(item.color));
+          }
+
+        }
+      });
+
+      var cahrt_data_export = {
+        labels: labels,
+
+        datasets: [{
+          borderWidth: 1,
+          data: dataset,
+          backgroundColor: backgroundColor,
+        }]
+      };
+
+
+      var myChart = new Chart(ctx, {
+        type: 'horizontalBar',
+        data: {
+          labels: cahrt_data_export.labels,
+          datasets: cahrt_data_export.datasets,
+          chart_options:chart_options
+        },
+
+        options: {
+          legend: {
+              display: false
+          },
+          // maintainAspectRatio: false,
+          tooltips: {
+            enabled: false,
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          },
+
+        }
+      });
+
+    },
+    'json', $('body'));
+});
+
+/**
+ * Parse bacghrouncolor element to RGBA
+ * @param {Integer} accordion_id The accordion element id
+ */
+function parseColorOBJ(bce) {
+  // if (bce.highlight) {
+  //   return 'rgba(' + highlightedChartElementColor.r + ',' + highlightedChartElementColor.g + ',' + highlightedChartElementColor.b + ',' + highlightedChartElementColor.a + ')';
+  // }
+  return 'rgba(' + bce.r + ',' + bce.g + ',' + bce.b + ',' + bce.a + ')';
+}
+</script>
+</html>
