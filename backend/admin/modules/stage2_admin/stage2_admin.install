@@ -1,0 +1,690 @@
+<?php
+use Drupal\Core\Database\Database;
+use Drupal\stage2_admin\StageDatabaseSM; // Used in initial client label loading
+
+ function stage2_admin_schema() {
+   db_query("CREATE SCHEMA IF NOT EXISTS s2;");
+   db_query("CREATE SCHEMA IF NOT EXISTS sta;");
+   db_query("CREATE SCHEMA IF NOT EXISTS ge;");
+   db_query("CREATE EXTENSION IF NOT EXISTS postgis;");
+
+   $userial=array('type'=>'serial','unsigned'=>TRUE,'not null' => TRUE);
+   $avarchar=array('pgsql_type'=>'varchar[]');
+   $varchar=array('type'=>'varchar');
+   $json=array('pgsql_type'=>'json');
+   $integer=array('type'=>'int');
+   $timestamp=array('pgsql_type'=>'timestamp without time zone');
+
+   $schema['s2.var_ds']=array(
+     'description'=>'data sources',
+     'fields'=>array(
+       'id'=>$userial,
+       'georef'=>$varchar,
+       'ispx'=>array('pgsql_type'=>'boolean'),
+       'dsname'=>$varchar,
+       'tname'=>$varchar
+     ),
+     'primary key'=>array('id')
+   );
+
+   $schema['s2.var_properties']=array(
+     'description'=>'variable properties',
+     'fields'=>array(
+       'id'=>$userial,
+       'data'=>$json,
+	   'default'=>array('type'=>'int', 'default' => 0),
+     ),
+     'primary key'=>array('id')
+   );
+
+   $schema['s2.var_names']=array(
+     'description'=>'variable names (as imported from the source)',
+     'fields'=>array(
+       'id'=>$userial,
+       'var_tree_id'=>$integer,
+       'name'=>$varchar,
+       'short_name'=>array('type'=>'varchar','length' => 10),
+  	   'description'=>$varchar,
+  	   'delineation'=>$varchar,
+  	   'picture'=>$varchar,
+       'popup_title'=>$varchar,
+       'legend_title'=>$varchar
+     ),
+     'primary key'=>array('id'),
+		 'unique keys' => array(
+		 'short_name' => array('short_name')
+		 )
+
+   );
+
+   $schema['s2.note']=array(
+     'description'=>'notes',
+     'fields'=>array(
+       'id'=>$userial,
+       'data'=>$varchar
+     ),
+     'primary key'=>array('id')
+   );
+
+   $schema['s2.var_tree']=array(
+     'description'=>'menu tree',
+     'fields'=>array(
+       'id'=>$userial,
+       'parent_id'=>$integer,
+	   'position'=>$integer,
+       'data'=>$varchar
+     ),
+     'primary key'=>array('id'),
+     'foreign keys' => array(
+       'fk_parent_id_menu_tree_id' => array(
+         'table' => 'var_tree',
+         'columns' => array('parent_id' => 'id')
+        )
+     )
+   );
+
+   $schema['s2.var_values']=array(
+     'description'=>'variable values',
+     'fields'=>array(
+       'id'=>$userial,
+       'data'=>$varchar,
+       'var_ds_id'=>$integer,
+       'spatial_layer_id'=>$integer,
+       'var_properties_id'=>$integer,
+       'var_names_id'=>$integer,
+       'var_note_id'=>$integer,
+       'valid_from'=>$timestamp,
+       'modified'=>$timestamp,
+	   'published'=>array('type'=>'int', 'not null' => TRUE, 'default' => 0),
+	   'publish_on'=>$timestamp,
+     ),
+     'primary key'=>array('id')
+   );
+
+   $schema['s2.spatial_layer']=array(
+     'description'=>'imported spatial layers names',
+     'fields'=>array(
+       'id'=>$userial,
+       'name'=>$varchar,
+       'note_id'=>$integer,
+       'weight'=>$integer,
+       'cache' =>array('pgsql_type'=>'json'),
+       'tsuv'=>$varchar,
+     ),
+     'primary key'=>array('id')
+   );
+
+   $schema['s2.spatial_layer_date']=array(
+     'description'=>'dates (valid_from) of imported spatial layers',
+     'fields'=>array(
+       'id'=>$userial,
+       'valid_from'=>$timestamp,
+       'table_name'=>$varchar,
+       'note_id'=>$integer,
+       'spatial_layer_id'=>$integer,
+       'crs_id'=>$integer,
+       'description'=>$varchar,
+       'col_names'=>$varchar,
+       'borders'=>$integer,
+       'modified'=>$timestamp
+     ),
+     'primary key'=>array('id')
+   );
+
+   $schema['s2.crs']=array(
+     'description'=>'coordinate reference system',
+     'fields'=>array(
+       'id'=>$userial,
+       'epsg_srid'=>$integer,
+       'proj4text'=>$varchar,
+       'type'=>$varchar,
+     ),
+     'primary key'=>array('id'),
+     'unique keys' => array(
+     'epsg_srid' => array('epsg_srid')
+     )
+   );
+   // Labels to be displayed in the client
+   $schema['s2.var_labels']=array(
+     'description'=>'Stage client labels',
+     'fields'=>array(
+       'id'=>$userial,
+       'id_cli'=>$integer,
+       'label'=>$varchar, // Label in english language
+       'language'=>$varchar, // language id defined by Drupal tranlation module
+       'description'=>$varchar,
+
+     ),
+     'primary key'=>array('id'),
+   );
+   // Advanced settings table
+   $schema['s2.advanced_settings']=array(
+     'description'=>'Advanced settings',
+     'fields'=>array(
+       'id'=>$userial,
+       'setting'=>$varchar,
+       'value'=>$varchar,
+       'description'=>$varchar,
+       'access'=>$integer, // (null or 0) setting can be edited manualy in the DB TODO
+                           //  (1) drupal administrator can see and modify the setting
+                           //  (2) role Stage2admin can see and modify the setting
+     ),
+     'primary key'=>array('id'),
+     'unique keys' => array(
+       'setting' => array('setting')
+     )
+   );
+
+   // Log
+   $schema['s2.log']=array(
+     'fields'=>array(
+       'id'=>$userial,
+       'user'=>$integer, // Drupal user ID
+       'action'=>$varchar,
+       'report'=>$varchar,
+       'modified'=>$timestamp
+     ),
+     'primary key'=>array('id')
+   );
+
+   // Export service log
+   $schema['s2.var_download']=array(
+     'fields'=>array(
+       'id'=>$userial,
+       'var_values_id'=>$integer,
+       'ip'=>$varchar,
+       'time'=>$timestamp
+     ),
+     'primary key'=>array('id')
+   );
+
+   // Translations
+   $schema['s2.translations']=array(
+     'fields'=>array(
+      'id'=>$userial,
+       'table_name'=>$varchar, // Name of the table where original string is stored
+       'column_name'=>$varchar, // Name of the column in given table where original string is stored
+       'orig_id'=>$integer, // Id in the original table
+       'language_id'=>$varchar, // drupal id of the language e.g. en
+       'translation'=>$varchar
+     ),
+    'primary key'=>array('id')
+   );
+
+    $schema['s2.special_values']=array(
+     'fields'=>array(
+      'id'=>$userial,
+	  'var_properties_id'=>$integer,
+       'special_value'=>$varchar,
+       'legend_caption'=>$varchar,
+       'color'=>$varchar,
+     ),
+    'primary key'=>array('id')
+   );
+
+    $schema['s2.published_charts']=array(
+     'fields'=>array(
+      'id'=>$userial,
+	    'chart_data'=>$varchar
+     ),
+    'primary key'=>array('id')
+   );
+
+    $schema['s2.var_links']=array(
+     'fields'=>array(
+      'id'=>$userial,
+      'codes'=>$varchar,
+      'source'=>$varchar,
+      'acronym'=>$varchar
+     ),
+    'primary key'=>array('id')
+   );
+
+   return $schema;
+
+}
+
+  /**
+  * Drops old tables outside of s2 schema - added for backward compatibility.
+  * @return void
+  */
+
+function stage2_admin_uninstall() {
+  $oldTables=array("var_sids","var_properties","var_names","note","var_tree","var_values","spatial_join","spatial_layer","spatial_layer_date","crs","var_labels","var_tree_properties","advanced_settings","log");
+  foreach ($oldTables as $table) {
+    if (db_table_exists($table)) {
+      db_drop_table($table);
+    }
+  }
+ }
+
+ function stage2_admin_update_8002(){
+  $schema = Database::getConnection()->schema();
+  if (!$schema->fieldExists('s2.var_values', 'spatial_layer_id')) $schema->addField('s2.var_values', 'spatial_layer_id', array('type' => 'int'));
+ }
+
+ function stage2_admin_update_8003(){
+  $schema = Database::getConnection()->schema();
+
+  if (!$schema->fieldExists('s2.var_names', 'delineation')) $schema->addField('s2.var_names', 'delineation', array('type'=>'varchar'));
+  if (!$schema->fieldExists('s2.var_values', 'modified')) $schema->addField('s2.var_values', 'modified', array('pgsql_type'=>'timestamp without time zone'));
+ }
+
+ function stage2_admin_update_8004(){
+  $schema = Database::getConnection()->schema();
+  if ($schema->tableExists('s2.var_lables')) {
+    db_query('alter table s2.var_lables rename to var_labels');
+    db_query('alter table s2.var_labels alter column language type varchar');
+  }
+ }
+
+ function stage2_admin_update_9002(){
+   $schema = Database::getConnection()->schema();
+   if (!$schema->fieldExists('s2.var_names', 'picture')) $schema->addField('s2.var_names', 'picture', array('type'=>'varchar'));
+ }
+
+ function stage2_admin_update_9005(){
+   $moduleHandler = \Drupal::service('module_handler');
+  if (!$moduleHandler->moduleExists('menu_trail_by_path')){
+    \Drupal::service('module_installer')->install(['menu_trail_by_path']);
+  }
+ }
+
+ function stage2_admin_update_9007(){
+	 db_query('ALTER TABLE s2.var_names ADD CONSTRAINT short_name_unique UNIQUE (short_name)');
+
+ }
+
+ function stage2_admin_update_9008(){
+	 db_query('update s2.var_values set valid_from=valid_from::date');
+ }
+
+ function stage2_admin_update_9009(){
+    $result=db_query('select id from s2.var_names where short_name is null');
+    $records = $result->fetchAll();
+    $i=1;
+    foreach ($records as $record) {
+      db_query("update s2.var_names set short_name='auto__$i' where id={$record->id}");
+      $i++;
+    }
+ }
+
+ function stage2_admin_update_9010(){
+	 $schema = Database::getConnection()->schema();
+   if (!$schema->fieldExists('s2.spatial_layer_date', 'col_names')) $schema->addField('s2.spatial_layer_date', 'col_names', array('type'=>'varchar'));
+ }
+
+ function stage2_admin_update_9013(){
+  db_query("CREATE SCHEMA IF NOT EXISTS sta;");
+  $schema = Database::getConnection()->schema();
+  if ($schema->fieldExists('s2.var_values', 'var_sids_id')) $schema->dropField('s2.var_values', 'var_sids_id');
+
+  $userial=array('type'=>'serial','unsigned'=>TRUE);
+  $varchar=array('type'=>'varchar');
+  $var_ds=array(
+     'description'=>'data sources',
+     'fields'=>array(
+       'id'=>$userial,
+       'georef'=>$varchar,
+       'ispx'=>array('pgsql_type'=>'boolean'),
+       'dsname'=>$varchar,
+       'tname'=>$varchar
+     ),
+     'primary key'=>array('id')
+   );
+
+  if(!db_table_exists('s2.var_ds')){
+    db_create_table('s2.var_ds', $var_ds);
+  }
+
+  $schema = Database::getConnection()->schema();
+  if (!$schema->fieldExists('s2.var_values', 'var_ds_id')) $schema->addField('s2.var_values', 'var_ds_id', array('type'=>'int'));
+
+  dropField($schema,'s2.var_values','data');
+  addField($schema,'s2.var_values','data',$varchar);
+
+  db_query("DELETE from s2.var_values");
+ }
+
+ function dropField($schema,$table,$field){
+   if ($schema->fieldExists($table, $field)) $schema->dropField($table,$field);
+ }
+
+ function addField($schema,$table,$field,$definition){
+  if (!$schema->fieldExists($table,$field)) $schema->addField($table,$field, $definition);
+ }
+
+ function stage2_admin_update_9014(){
+	$userial=array('type'=>'serial','unsigned'=>TRUE);
+	$varchar=array('type'=>'varchar');
+	$integer=array('type'=>'int');
+	$timestamp=array('pgsql_type'=>'timestamp without time zone');
+
+	$var_download=array(
+     'fields'=>array(
+       'id'=>$userial,
+       'var_values_id'=>$integer,
+       'ip'=>$varchar,
+       'time'=>$timestamp
+     ),
+     'primary key'=>array('id')
+   );
+
+	  if(!db_table_exists('s2.var_download')){
+		db_create_table('s2.var_download', $var_download);
+	  }
+ }
+
+ function stage2_admin_update_9015(){
+   db_query("UPDATE s2.advanced_settings set value=:value where setting='classification_methods'",
+            array(':value'=>json_encode(["0"=>"Manual", "1"=>"Quantiles","2"=>"Equal intervals","4"=>"Jenks (natural breaks)"])));
+ }
+
+ function stage2_admin_update_9016(){
+  $cb=[3,4,5,6,7,8,9];
+   db_query("UPDATE s2.advanced_settings set value=:value where setting='class_breaks'",
+            array(':value'=>json_encode(array_combine($cb,$cb))));
+ }
+
+ /**
+ * Creates s2.special_values table in database
+ */
+ function stage2_admin_update_9017(){
+	$userial=array('type'=>'serial','unsigned'=>TRUE);
+	$varchar=array('type'=>'varchar');
+	$integer=array('type'=>'int');
+
+	$special_values=array(
+     'fields'=>array(
+      'id'=>$userial,
+	  'var_properties_id'=>$integer,
+       'special_value'=>$varchar,
+       'legend_caption'=>$varchar,
+       'color'=>$varchar,
+     ),
+    'primary key'=>array('id')
+   );
+
+	  if(!db_table_exists('s2.special_values')){
+		db_create_table('s2.special_values', $special_values);
+	  }
+ }
+
+ /**
+ * Creates s2.published_charts table in database
+ */
+ function stage2_admin_update_9018(){
+	$cid=array('type'=>'serial','unsigned'=>TRUE);
+	$varchar=array('type'=>'varchar');
+
+	$published_charts=array(
+     'fields'=>array(
+      'id'=>$cid,
+	     'chart_data'=>$varchar
+     ),
+    'primary key'=>array('id')
+   );
+
+	  if(!db_table_exists('s2.published_charts')){
+      db_create_table('s2.published_charts', $published_charts);
+	  }
+ }
+
+ /**
+  * Creates s2,var_links table
+  */
+ function stage2_admin_update_9019(){
+  $userial=array('type'=>'serial','unsigned'=>TRUE);
+	$integer=array('type'=>'int');
+  $varchar=array('type'=>'varchar');
+
+   $var_links=array(
+     'fields'=>array(
+      'id'=>$userial,
+      'codes'=>$varchar,
+      'source'=>$varchar,
+      'acronym'=>$varchar
+     ),
+    'primary key'=>array('id')
+   );
+
+  if(!db_table_exists('s2.var_links')){
+    db_create_table('s2.var_links', $var_links);
+  }
+ }
+ // BUGFIX sorting in menu tree
+ function stage2_admin_update_9020(){
+   db_query('alter table s2.var_tree alter column "position" type numeric(10,0) using "position"::numeric;'
+   );
+ }
+
+ // vrednost za Slovenijo
+ function stage2_admin_update_9025(){
+	try {
+		db_query("ALTER TABLE s2.spatial_layer ADD COLUMN tsuv varchar;");
+	}
+	catch(Exception $e){
+		;
+	}
+ }
+
+ function stage2_admin_update_9028(){
+  $schema = Database::getConnection()->schema();
+  if (!$schema->fieldExists('s2.var_ds', 'update_status')) $schema->addField('s2.var_ds', 'update_status', array('type' => 'int','default' => 0));
+ }
+
+ function stage2_admin_update_9041(){
+   db_query("ALTER TABLE s2.var_values ADD COLUMN inspire varchar;"
+   );
+ }
+
+ function stage2_admin_update_9043(){
+  $schema = Database::getConnection()->schema();
+  if (!$schema->fieldExists('s2.var_names', 'legend_title')) $schema->addField('s2.var_names', 'legend_title', array('type' => 'varchar'));
+ }
+
+ function stage2_admin_update_9045(){
+   db_query("UPDATE s2.advanced_settings set value=:value where setting='classification_methods'",
+            array(':value'=>json_encode(["0"=>"Manual", "1"=>"Quantiles","2"=>"Equal intervals","4"=>"Jenks (natural breaks)","8"=>"Categorized"])));
+ }
+
+ function stage2_admin_update_9047(){
+   db_query("INSERT into s2.advanced_settings (setting,value,access) values (?,?,?)",['cloning',0,0]);
+ }
+
+ function unique_key_constraint($tname,$constraintName,$cnames){
+  try{
+    db_query("alter table $tname add constraint $constraintName UNIQUE (".implode(',',$cnames).");");
+  }
+  catch(Exception $e){
+     ;
+  }
+ }
+
+ function insertTranslations($required_client_labels){
+  foreach ($required_client_labels as $key => $entry) {
+       try{
+           $return_value = db_insert('s2.var_labels')
+           ->fields($entry)
+           ->execute();
+       }
+       catch(Exception $e){
+          ;
+       }
+    }
+ }
+
+ function stage2_admin_update_9049(){
+    unique_key_constraint('s2.var_labels','id_cli_language_key',['id_cli', 'language']);
+
+    $required_client_labels=[];
+    $required_client_labels[] = array('id_cli'=> '120','label'=>'Legend settings','language'=>'en','description'=>'resets legend');
+    $required_client_labels[] = array('id_cli'=> '121','label'=>'Spatial query','language'=>'en','description'=>'resets legend');
+    $required_client_labels[] = array('id_cli'=> '122','label'=>'New variable','language'=>'en','description'=>'resets legend');
+    $required_client_labels[] = array('id_cli'=> '123','label'=>'Select','language'=>'en','description'=>'resets legend');
+    $required_client_labels[] = array('id_cli'=> '124','label'=>'Time series','language'=>'en','description'=>'resets legend');
+    $required_client_labels[] = array('id_cli'=> '125','label'=>'Spatial query statistics','language'=>'en','description'=>'resets legend');
+
+    insertTranslations($required_client_labels);
+}
+
+ function stage2_admin_update_9051(){
+    unique_key_constraint('s2.var_labels','id_cli_language_key',['id_cli', 'language']);
+    $required_client_labels=[];
+
+    $required_client_labels[] = array('id_cli'=> '107','label'=>'selected','language'=>'en','description'=>'Leaflet draw component');
+    $required_client_labels[] = array('id_cli'=> '108','label'=>'Only 12 elements allowed.','language'=>'en','description'=>'Leaflet draw component');
+    $required_client_labels[] = array('id_cli'=> '109','label'=>'Filter','language'=>'en','description'=>'Leaflet draw component');
+    $required_client_labels[] = array('id_cli'=> '110','label'=>'About','language'=>'en','description'=>'Leaflet draw component');
+    $required_client_labels[] = array('id_cli'=> '111','label'=>'Add new variable','language'=>'en','description'=>'Leaflet draw component');
+    $required_client_labels[] = array('id_cli'=> '112','label'=>'Share file','language'=>'en','description'=>'Leaflet draw component');
+    $required_client_labels[] = array('id_cli'=> '113','label'=>'Export picture','language'=>'en','description'=>'Leaflet draw component');
+    $required_client_labels[] = array('id_cli'=> '114','label'=>'Remove','language'=>'en','description'=>'Leaflet draw component');
+    $required_client_labels[] = array('id_cli'=> '115','label'=>'filter','language'=>'en','description'=>'Leaflet draw component');
+    $required_client_labels[] = array('id_cli'=> '116','label'=>'Edit interval','language'=>'en','description'=>'Edit legend interval title');
+    $required_client_labels[] = array('id_cli'=> '117','label'=>'Unclassified values','language'=>'en','description'=>'unclassified');
+    $required_client_labels[] = array('id_cli'=> '118','label'=>'no data','language'=>'en','description'=>'no data');
+    $required_client_labels[] = array('id_cli'=> '119','label'=>'Reset settings','language'=>'en','description'=>'resets legend');
+
+    insertTranslations($required_client_labels);
+ }
+
+ function stage2_admin_update_9053(){
+    unique_key_constraint('s2.var_labels','id_cli_language_key',['id_cli', 'language']);
+    $required_client_labels=[];
+
+    $required_client_labels[] = array('id_cli'=> '126','label'=>'level_label','language'=>'en','description'=>'level_label');
+    $required_client_labels[] = array('id_cli'=> '127','label'=>'legend_label','language'=>'en','description'=>'level_label');
+    $required_client_labels[] = array('id_cli'=> '128','label'=>'description_label','language'=>'en','description'=>'level_label');
+    $required_client_labels[] = array('id_cli'=> '129','label'=>'copyright','language'=>'en','description'=>'level_label');
+
+    insertTranslations($required_client_labels);
+ }
+ 
+ function addFieldIfNotExist($tableName,$fieldName,$fieldType){
+  //if (!$schema->fieldExists('s2.var_names', 'legend_title')) $schema->addField('s2.var_names', 'legend_title', array('type' => 'varchar'));
+  $schema = Database::getConnection()->schema();
+  if (!$schema->fieldExists($tableName,$fieldName)) $schema->addField($tableName, $fieldName, $fieldType);
+ }
+ 
+ function stage2_admin_update_9055(){
+  addFieldIfNotExist('s2.spatial_layer','naming_scheme',array('pgsql_type'=>'smallint','default' => 0));
+ }
+ 
+ function stage2_admin_update_9057(){
+  addFieldIfNotExist('s2.spatial_layer','cache',array('pgsql_type'=>'json'));
+ }
+
+ function stage2_admin_update_9058(){
+  addFieldIfNotExist('s2.log','additional_data',array('pgsql_type'=>'json'));
+ }
+
+ function stage2_admin_update_9059() {
+    $help = json_decode(db_query("SELECT value FROM s2.advanced_settings where setting=:help",[':help' => 'help'])->fetchField(),true);
+    $help['en']['Cookies'] = "<h4>Cookies used by STAGE application</h4> <fieldset class='cookie-fs'>        <legend> _pk_ses,_pk_id </legend>                <b>Purpose: </b>analytics cookies (Piwik tool)<br>                <b>Provider: </b>Statistical Office<br>                <b>Expiry: </b>_pk_ses: 30 min, _pk_id: 13 months<br>        </fieldset>    <fieldset class='cookie-fs'>        <legend> _osm_totp_token </legend>        <b>Purpose: </b>optimal operation of Open Street Map (OSM) services<br>        <b>Provider: </b>Open Street Map (3rd party cookie)<br>        <b>Expiry: </b>1 hour<br><b>Note: </b> this cookie is used when/if the OSM base layer is used - it can be disabled in your browser settings</fieldset><br><h4>Your cookie settings</h4> You can change your decision about cookies at any time by clicking this <a href='#' id='reset-cookies'>link</a>.";
+    $help['sl']['Piškotki'] = "<h4>Katere piškotke uporablja STAGE aplikacija</h4> <fieldset class='cookie-fs'>        <legend> _pk_ses,_pk_id </legend>                <b>Namen: </b>piškotki za analizo obiska strani (orodje Piwik)<br>                <b>Izdajatelj: </b>Statistični urad<br>                <b>Življenska doba piškotkov: </b>_pk_ses: 30 min, _pk_id: 13 mesecev<br>        </fieldset>    <fieldset class='cookie-fs'>        <legend> _osm_totp_token </legend>        <b>Namen: </b>optimalno delovanje Open Street Map (OSM) kartografskih servisov<br>        <b>Izdajatelj: </b>Open Street Map (3rd party cookie - piškotek od drugod)<br>        <b>Življenska doba piškotka: </b>1 ura<br><b>Opomba: </b>ta piškotek se uporablja, ko/če uporabljate OSM podlago - onemogočite ga lahko v nastavitvah brskalnika    </fieldset><br><h4>Vaše nastavitve piškotkov</h4> Svojo odločitev o piškotkih lahko kadarkoli spremenite s klikom na to <a href='#' id='reset-cookies'>povezavo</a>.";
+    db_query("UPDATE s2.advanced_settings SET value=:value WHERE setting=:help",[':value'=>json_encode($help), ':help'=>'help']);
+    //https://operations.osmfoundation.org/2017/01/31/january.html
+ }
+
+ function stage2_admin_update_9060() {
+    db_query("UPDATE s2.translations SET translation='skupaj' WHERE translation='znesek v milijonih EUR'");
+    $trans = db_query("SELECT * FROM s2.translations")->fetchAll();
+    $updated = [];
+    foreach($trans as $t) {
+      $key = $t->table_name.'-'.$t->column_name.'-'.$t->translation;
+      if (empty($updated[$key])) {
+        StageDatabaseSM::check_duplicate($t->table_name, $t->column_name, $t->orig_id, $t->language_id, $t->translation);
+        $updated[$key] = true;
+      }
+    }
+ }
+
+ function stage2_admin_update_9061() {
+    $id_cli = db_query("SELECT max(id_cli) FROM s2.var_labels")->fetchField();
+    $id_cli++;
+    $required_client_labels=[];
+    $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Manual','language'=>'en','description'=>'Manual');
+    $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Quantiles','language'=>'en','description'=>'Quantiles');
+    $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Equal intervals','language'=>'en','description'=>'Equal intervals');
+    $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Jenks (natural breaks)','language'=>'en','description'=>'Jenks (natural breaks)');
+    $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Categorized','language'=>'en','description'=>'Categorized');
+
+    $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Selected interval before edit','language'=>'en','description'=>'');
+    $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Lower interval limit','language'=>'en','description'=>'');
+    $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Upper interval limit','language'=>'en','description'=>'');
+    $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Split the interval at value','language'=>'en','description'=>'');
+    $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Input a value betwen <%=m1%> and <%=m2%>','language'=>'en','description'=>'');
+    $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Input a value betwen <%=m1%> and <%=m2%> and press the ENTER key.','language'=>'en','description'=>'');
+    
+    insertTranslations($required_client_labels);
+ }
+
+ function stage2_admin_update_9062() {
+  //drush ev "var_dump(\Drupal::keyValue('system.schema')->get('stage2_admin'))"; #get module version
+  $id_cli = db_query("SELECT max(id_cli) FROM s2.var_labels")->fetchField();
+  $id_cli++;
+  $required_client_labels=[];
+
+  $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Reverse color order','language'=>'en','description'=>'Inverse colors');
+  $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Do you really want to remove selected interval?','language'=>'en','description'=>'Inverse colors');
+  $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Do you really want to remove selected row?','language'=>'en','description'=>'Inverse colors');
+  $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Remove selected','language'=>'en','description'=>'Inverse colors');
+  $required_client_labels[] = array('id_cli'=> $id_cli++,'label'=>'Year','language'=>'en','description'=>'Inverse colors');
+  
+  insertTranslations($required_client_labels);
+}
+
+function stage2_admin_update_9063() {
+  $translations = [];
+  $translations[] = ['label'=>'Reverse color order','trans'=>'Obrnjena barvna lestvica','language'=>'sl','description'=>''];
+  $translations[] = ['label'=>'Do you really want to remove selected interval?','trans'=>'Ali res želite odstraniti izbrani interval?','language'=>'sl','description'=>''];
+  $translations[] = ['label'=>'Do you really want to remove selected row?','trans'=>'Ali res želite odstraniti izbrano vrstico?','language'=>'sl','description'=>''];
+  $translations[] = ['label'=>'Remove selected','trans'=>'Odstrani izbiro','language'=>'sl','description'=>''];
+  $translations[] = ['label'=>'Year','trans'=>'Leto','language'=>'sl','description'=>''];
+  updateTranslations($translations);
+}
+
+function stage2_admin_update_9064() {
+  db_query("DELETE FROM s2.var_links WHERE acronym IN ('TOT_P_H2','TOT_M_H2','TOT_F_H2');");
+  unique_key_constraint('s2.var_links','acronym_unique_key',['acronym']);
+  unique_key_constraint('s2.var_links','codes_unique_key',['codes']);
+}
+
+
+function updateTranslations($translations) {
+  $required_client_labels = [];
+  foreach($translations as $t) {
+    $id_cli = db_query("SELECT id_cli from s2.var_labels WHERE label=?",[$t['label']])->fetchField();
+    if (!empty($id_cli)) {
+      $t['label'] = $t['trans'];
+      unset($t['trans']);
+      $t['id_cli']=$id_cli;
+      $required_client_labels[]=$t;
+    }
+  }
+  insertTranslations($required_client_labels);
+}
+
+ /**
+ * Creates user roles
+ */
+ function stage2_admin_install() {
+
+   // Add Stage2admin role if it does not exist
+   if (!isset(user_roles()['Stage2admin'])){
+      $role = \Drupal\user\Entity\Role::create(array('id' => 'Stage2admin', 'label' => 'Stage2admin'));
+      $role->save();
+      user_role_grant_permissions(array('Stage2admin'), array('stage2_admin content_administrator'));
+      user_role_grant_permissions(array('administrator'), array('stage2_admin content_administrator'));
+   }
+   // load obligatory labels to the s2.var_labels table
+   unique_key_constraint('s2.var_labels','id_cli_language_key',['id_cli', 'language']);
+   StageDatabaseSM::stageResetClientLabels();
+
+  db_query("update spatial_ref_sys set
+	srtext='PROJCS[\"MGI 1901 / Slovene National Grid\",GEOGCS[\"MGI 1901\",DATUM[\"MGI_1901\",SPHEROID[\"Bessel 1841\",6377397.155,299.1528128,AUTHORITY[\"EPSG\",\"7004\"]],TOWGS84[409.545,72.164,486.872,3.085957,5.469110,-11.020289,17.919665],AUTHORITY[\"EPSG\",\"1031\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"3906\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",15],PARAMETER[\"scale_factor\",0.9999],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",-5000000],UNIT[\"metre\",1,AUTHORITY[\"EPSG\",\"9001\"]],AXIS[\"Y\",EAST],AXIS[\"X\",NORTH],AUTHORITY[\"EPSG\",\"3912\"]]',
+	proj4text='+proj=tmerc +lat_0=0 +lon_0=15 +k=0.9999 +x_0=500000 +y_0=-5000000 +ellps=bessel +towgs84=409.545,72.164,486.872,3.085957,5.469110,-11.020289,17.919665 +units=m +no_defs'
+	where srid=3912;");
+
+}

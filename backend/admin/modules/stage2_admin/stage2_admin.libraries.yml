@@ -1,0 +1,230 @@
+jsTree:
+ license:
+   name: MIT
+ js:
+   js/external/jstree.min.js: {}
+ css:
+   theme:
+     css/external/jstree/style.min.css: {}
+     css/StageMenuTreeForm.css: {}
+     css/stage_2_admin_style.css: {}
+ dependencies:
+   - core/jquery
+
+jsTreeInternal:
+ js:
+     js/jsTreeCall.js: {}
+ dependencies:
+      - core/jquery
+      - core/drupal
+      - core/jquery.once
+
+jsMenuTreeForm:
+ js:
+     js/jsMenuTreeForm.js: {}
+ dependencies:
+      - core/jquery
+      - core/drupal
+
+
+StageGeospatialLayerEditForm:
+  css:
+    theme:
+      css/stage_2_admin_style.css: {}
+      css/external/select2.css: {}
+      css/StageGeospatialLayerEditForm.css: {}
+  js:
+    js/external/select2.js: {}
+    js/StageGeospatialLayerEditForm.js: {}
+  dependencies:
+    - core/jquery
+    - stage2_admin/jQueryFileUpload
+
+StageFormsCommon:
+  css:
+    theme:
+      css/external/select2.css: {}
+  js:
+    js/StageFormsCommon.js: {}
+    js/external/select2.js: {}
+
+batch_import:
+  css:
+    theme:
+      css/stage_2_admin_style.css: {}
+      css/external/select2.css: {}
+      css/StageBatchImportForm.css: {}
+  js:
+    js/external/sieve.js: {}
+    js/external/select2.js: {}
+    # <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+    js/external/jquery.ui.widget.js: {}
+    js/StageBatchImportForm.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.datepicker
+    - stage2_admin/jQueryFileUpload
+
+px_import:
+  css:
+    theme:
+      css/stage_2_admin_style.css: {}
+      css/StagePxImportForm.css: {}
+      css/StageBatchImportForm.css: {}
+  js:
+    js/StagePxImportForm.js: {}
+    js/external/sieve.js: {}
+  dependencies:
+    - core/jquery
+
+jsColorBrewer:
+ js:
+     js/colorbrewer.min.js: {}
+ css:
+    theme:
+      css/colorbrewer.css: {}
+
+jsColorBrewerPickerInternal:
+  js:
+     js/colorbrewer.internal.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+StageTranslationsForm:
+  version: 1.x
+  css:
+    theme:
+      css/stage_2_admin_style.css: {}
+  js:
+    js/StageTranslationsForm.js: {}
+    js/external/sieve.js: {}
+  dependencies:
+    - core/jquery
+
+variables:
+  version: 1.x
+  css:
+    theme:
+      css/stage_2_admin_style.css: {}
+  js:
+    js/variables.js: {}
+    js/external/sieve.js: {}
+  dependencies:
+    - core/jquery
+
+StageGeospatialLayersForm:
+  version: 1.x
+  css:
+    theme:
+      css/stage_2_admin_style.css: {}
+  js:
+    js/StageGeospatialLayersForm.js: {}
+    js/external/sieve.js: {}
+  dependencies:
+    - core/jquery
+
+StageMenuTreeAddForm:
+  version: 1.x
+  css:
+    theme:
+      css/stage_2_admin_style.css: {}
+      css/external/select2.css: {}
+      js/external/trumbowyg/ui/trumbowyg.min.css: {}
+  js:
+    js/StageMenuTreeAddForm.js: {}
+    js/external/select2.js: {}
+    js/external/trumbowyg/trumbowyg.js: {}
+  dependencies:
+    - core/jquery
+
+variable_edit:
+  css:
+    theme:
+      css/stage_2_admin_style.css: {}
+      js/cmp/css/popup.css: {}
+      js/cmp/css/icomoon-fa/style.css: {}
+      css/font-awesome.min.css: {}
+      css/legend.css: {}
+  js:
+    js/external/sieve.js: {}
+    js/external/select2.js: {}
+    js/external/require.js: {}
+    js/StageVariablesEditForm.js: {}
+  dependencies:
+    - core/jquery
+
+raw_parametrs_form:
+  version: 1.x
+  css:
+    theme:
+      css/stage_2_admin_style.css: {}
+
+client_translations:
+  version: 1.x
+  css:
+    theme:
+      css/stage_2_admin_style.css: {}
+  js:
+    js/client_translations.js: {}
+    js/external/sieve.js: {}
+  dependencies:
+    - core/jquery
+
+StageCoordinateSystemForm:
+    version: 1.x
+    css:
+      theme:
+        css/stage_2_admin_style.css: {}
+    js:
+      js/StageCoordinateSystemForm.js: {}
+      js/external/sieve.js: {}
+    dependencies:
+      - core/jquery
+
+jQueryFileUpload:
+  css:
+    theme:
+      css/bootstrap-progressbar-3.2.0.min.css: {}
+  js:
+    # <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+    js/external/jquery.iframe-transport.js: {}
+    # <!-- The basic File Upload plugin -->
+    js/external/jquery.fileupload.js: {}
+    # <!-- The File Upload processing plugin -->
+    js/external/jquery.fileupload-process.js: {}
+    # <!-- The File Upload validation plugin -->
+    js/external/jquery.fileupload-validate.js: {}
+    js/gi-jquery-fileupload.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.widget
+
+leaflet:
+  css:
+    theme:
+      js/external/leaflet/leaflet.css: {}
+  js:
+    js/external/leaflet/leaflet.js: {}
+    js/Stage2adminLeaflet.js: {}
+
+datepicker:
+  js:
+    js/datepicker_attach.js: {}
+    js/external/jquery-ui-timepicker-0.3.3/jquery.ui.timepicker.js: {}
+
+  dependencies:
+    - core/jquery
+    - core/jquery.ui.datepicker
+
+select2:
+    css:
+        theme:
+            css/external/select2/select2.css: {}
+    js:
+        js/external/select2/select2.min.js: {}
+        js/external/select2/select2.js: {}
+    dependencies:
+        - core/jquery
+        - core/jquery.once
+        - core/drupal

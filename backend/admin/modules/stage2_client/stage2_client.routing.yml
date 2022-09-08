@@ -1,0 +1,249 @@
+# List of active languages && list of client labels ig ::languages =='' function returns available languages
+# else client labels are returned in the selected language
+stage2_client.route_name01:
+  path: '/s2c/languages'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::languages'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+stage2_client.route_name02:
+  path: '/s2c/translations'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::translations'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+stage2_client.route_name03:
+  path: '/s2c/export'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::export'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+stage2_client.route_name04:
+  path: '/s2c/getFileUrl'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::getFileUrl'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+stage2_client.route_name05:
+  path: '/s2c/sldnames'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::sldnames'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+stage2_client.route_name06:
+  path: '/s2c/layers'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::layers'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# Menu tree structure if ::tree =='en' data is selected from the table s2.var_names else from the table s2.translations
+stage2_client.route_name07:
+  path: '/s2c/tree'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::tree'
+  methods:  [GET,POST]
+  requirements:
+   _permission: 'access content'
+
+# Spatial units and dates for which specific variable is defined
+stage2_client.route_name08:
+  path: '/s2c/varspat'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::varspat'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# Get variable values
+stage2_client.route_name09:
+  path: '/s2c/varval'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::varval'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# Get variable properties
+stage2_client.route_name10:
+  path: '/s2c/varprop'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::varprop'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# Get all available settings
+stage2_client.route_name11:
+  path: '/s2c/allsetings'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::allsetings'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# Get table name for selected variable from the var_values table
+stage2_client.route_name12:
+  path: '/s2c/geolay'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::geolay'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# Get help
+stage2_client.route_name13:
+  path: '/s2c/client_get_advanced_settings'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::client_get_advanced_settings'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# Get variable image
+stage2_client.route_name14:
+  path: '/s2c/var_img'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::var_img'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# Get var_prop description the description that is dependent on the SU and time
+stage2_client.route_name15:
+  path: '/s2c/varpropdesc'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::varpropdesc'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# Get id-s of all records in the table s2.that have the sane var_names_id in the table s2.var_values (id == vid - in the embeded map link)
+stage2_client.route_name16:
+  path: '/s2c/varvids'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::varvids'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# publish variable from the client
+stage2_client.route_name17:
+  path: '/s2c/publish_var'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::publish_var'
+  methods:  [GET]
+  requirements:
+   _permission: 'stage2_admin content_administrator'
+
+# is variable published
+stage2_client.route_name18:
+  path: '/s2c/ispublished'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::ispublished'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# publish variable from the client
+stage2_client.route_name19:
+  path: '/s2c/update_var_param'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::update_var_param'
+  methods:  [GET]
+  requirements:
+   _permission: 'stage2_admin content_administrator'
+
+stage2_client.route_name20:
+  path: '/s2c/view'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::view'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+stage2_client.route_name21:
+  path: '/s2c/delete_file'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::delete_file'
+  methods:  [POST]
+  requirements:
+   _permission: 'content_administrator'
+
+stage2_client.route_name22:
+  path: '/s2c/get_child_data'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::get_child_data'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+stage2_client.route_name23:
+  path: '/s2c/circle_query'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::circle_query'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+stage2_client.route_name24:
+  path: '/s2c/square_query'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::square_query'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+stage2_client.route_name25:
+  path: '/s2c/polygon_query'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::polygon_query'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+stage2_client.route_name26:
+  path: '/s2c/delineation'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::delineation'
+  methods:  [GET,POST]
+  requirements:
+   _permission: 'access content'
+
+# Save embeded chart data from client admin
+stage2_client.route_name27:
+  path: '/s2c/publish_chart'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::publish_chart'
+  methods:  [POST]
+  requirements:
+   _permission: 'stage2_admin content_administrator'
+
+# get embeded chart data
+stage2_client.route_name28:
+  path: '/s2c/gecd'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::gecd'
+  methods:  [GET]
+  requirements:
+   _permission: 'access content'
+
+# custom end point
+stage2_client.route_name29:
+  path: '/s2c/update'
+  defaults:
+    _controller: '\Drupal\stage2_client\Controller\Stage2ClientController::update'
+  methods:  [GET]
+  requirements:
+   _permission: 'stage2_admin'

@@ -1,0 +1,92 @@
+#settings-legend {
+	padding-top: 15px;
+  font-size: 14px;
+  line-height: 180%;
+}
+
+.fa {
+    cursor: pointer;
+}
+
+#settings-legend th,td {
+  padding: 0.23em;
+}
+
+#settings-legend th:nth-child(2),td:nth-child(2) {
+  padding-top: 0;
+	padding-bottom: 0;
+}
+
+#settings-legend table{
+  border-collapse: collapse;
+}
+
+#settings-legend tr.selected{
+	background-color: #25a2d1;
+	color: white;
+}
+
+#settings-legend .icon{
+  font-size:1.57em;
+  cursor: pointer;
+}
+
+.legend-dlg{
+  width:300px;
+  max-width: 95vw;
+}
+
+.legend-dlg .popup_header{
+  margin-bottom:0.5em;
+  min-height:30px;
+}
+
+.collor_picker{
+	margin-right: 0.25em;
+}
+
+#edit-interval-content{
+	display: none;
+}
+
+#edit-interval-content input{
+	width:100%;
+	line-height: 180%;
+	padding-left:0.25em;
+}
+.ilabel{
+	padding-top:0.5em;
+	padding-bottom:0.25em;
+}
+
+.legend-error {
+	color: red;
+}
+
+.ivalue{
+	width: 100%;
+	text-align: center;
+	font-weight: bold;
+	padding-bottom: 0.25em;
+}
+.helper-text{
+	font-size:0.75em;
+}
+
+#unclassified{
+	display: none;
+}
+
+#unclassified-container {
+	padding-top: 15px;
+	font-size: 14px;
+}
+
+#unclassified-container .icon{
+	font-size:28px;
+	cursor: pointer;
+}
+
+#unclassified-container table{
+	width:100%;
+}

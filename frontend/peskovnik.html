@@ -1,0 +1,32 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Moj peskovnik</title>
+  <script>
+
+    /*function onInput() {
+      document.getElementById("play").innerHTML = "Paragraph changed!";
+    }*/
+    </script>
+</head>
+
+<body>
+    <div id="play">
+
+    </div>
+    <hr>
+    V spodnje okno kopiraj iframe element ...<br>
+    <textarea id='input' rows="15" cols="180"></textarea>
+    <script>
+        const input = document.querySelector('textarea');
+        const log = document.getElementById('play');
+        input.addEventListener('input', updateValue);
+        function updateValue(e) {
+            log.innerHTML = e.target.value;
+        }
+    </script>
+</body>
+</html>

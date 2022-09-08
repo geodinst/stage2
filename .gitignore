@@ -1,0 +1,5 @@
+*.sql
+*.tar.gz
+backend/admin/sites/default/files
+c2-pgdata
+geoserver-data

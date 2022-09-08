@@ -1,0 +1,6 @@
+#Header always set X-Frame-Options "sameorigin"
+Header always set X-Frame-Options "allow-from *"
+
+#Header always set Content-Secure-Policy "default-src *;"
+Header always set Content-Security-Policy "child-src *; frame-ancestors *"
+

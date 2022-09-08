@@ -1,0 +1,64 @@
+stage2_admin.menuTree:
+  title: Menu tree editor
+  description: 'Stage2 menu tree editor'
+  parent: main
+  route_name: stage2_admin.menuTree
+  menu_name: main
+  weight: 90
+
+stage2_admin.variables:
+  title: Variables
+  description: 'Stage2 variables'
+  parent: main
+  route_name: stage2_admin.variables
+  menu_name: main
+  weight: 100
+
+
+stage2_admin.geospatialLayers:
+  title: Geospatial Layers
+  description: 'Stage2 geospatial layers'
+  parent: main
+  route_name: stage2_admin.geospatialLayers
+  menu_name: main
+  weight: 120
+
+stage2_admin.stagetranslations:
+  title: Translations
+  description: 'Stage2 translations'
+  parent: main
+  route_name: stage2_admin.stagetranslations
+  menu_name: main
+  weight: 130
+
+stage2_admin.realContent:
+  title: Settings
+  description: 'Stage2 settings'
+  parent: main
+  route_name: stage2_admin.realContent
+  menu_name: main
+  weight: 140
+
+stage2_admin.clientsettings:
+  title: Advanced settings
+  description: 'Stage2 client settings'
+  parent: main
+  route_name: stage2_admin.client
+  menu_name: main
+  weight: 150
+
+stage2_admin.reports:
+  title: Log
+  description: 'Stage2 reports'
+  parent: main
+  route_name: stage2_admin.reports
+  menu_name: main
+  weight: 160
+
+#stage2_admin.realContent2:
+#  title: Settings2
+#  description: 'Stage2 settings'
+#  parent: main
+#  route_name: stage2_admin.realContent2
+#  menu_name: main
+#  weight: 102

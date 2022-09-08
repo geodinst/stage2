@@ -1,0 +1,19 @@
+<span class="badge"><%=badge%></span>
+<table class="table">
+  <colgroup>
+    <col style="width:2.75em;">
+    <col>
+  </colgroup>
+  <tbody>
+    <%
+      _.each(items,function(item){
+        var c=item.color;
+        var text=item.text;
+    %>
+    <tr>
+      <td style="background-color: rgb(<%=c.r%>,<%=c.g%>,<%=c.b%>);"></td>
+      <td><%=text%></td>
+    </tr>
+    <%});%>
+  </tbody>
+</table>

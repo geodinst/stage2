@@ -1,0 +1,44 @@
+# docker-compose.yml
+version: '3'
+services:
+  web:
+    container_name: stage2-web
+    build: 
+      context: web
+      dockerfile: Dockerfile
+    volumes:
+      - ../frontend:/var/www/html
+      - ../backend/admin:/var/www/html/admin
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+      - geoserver
+      - memcached
+    tty: true
+    stdin_open: true
+  db:
+    container_name: stage2-db
+    image: "postgis/postgis:10-2.5"
+    ports:
+      - "5432:5432"
+    env_file:
+      - database.env # configure postgres
+    volumes:
+      - ./c2-pgdata:/var/lib/postgresql/data/ # persist data even if container shuts down
+      - ./:/home
+  geoserver:
+    container_name: stage2-geoserver
+    image: kartoza/geoserver:2.21.1
+    volumes:
+      - ./geoserver-data:/opt/geoserver/data_dir
+    ports:
+      - "8081:8080"
+    restart: on-failure
+    env_file:
+      - geoserver.env
+    depends_on:
+      - db
+  memcached:
+    container_name: stage2-memcached
+    image: memcached

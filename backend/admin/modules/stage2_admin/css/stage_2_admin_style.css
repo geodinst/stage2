@@ -1,0 +1,101 @@
+.element-column-left{
+  float : left;
+  width : 50%;
+  min-width : 200px;
+}
+.element-column-right{
+  float : right;
+  width : 50%;
+  min-width : 200px;
+}
+.element-clear-fix{
+  clear : both;
+}
+.element-search{
+  float : right;
+  min-width : 220px;
+  margin-bottom: 10px;
+}
+
+#progress{
+  width: 80%
+}
+.progress-bar-success {
+    background-color: blue;
+}
+
+.fileinput-button {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.btn-success {
+  background-color: #e8e8e8;
+  background-image: -webkit-linear-gradient(top, #f3f3f3, #e8e8e8);
+  background-image: linear-gradient(to bottom, #f3f3f3, #e8e8e8);
+  border: 1px solid #e4e4e4;
+  border-bottom-color: #b4b4b4;
+  border-left-color: #d2d2d2;
+  border-right-color: #d2d2d2;
+  color: #3a3a3a;
+  cursor: pointer;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, sans-serif;
+  font-size: 0.929em;
+  font-weight: normal;
+  text-align: center;
+  padding: 0.250em 1.063em;
+  border-radius: 1em;
+  display: inline-block;
+  line-height: normal;
+}
+
+.fileinput-button input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+    /*font-size: 200px !important;*/
+    direction: ltr;
+    cursor: pointer;
+}
+.duplicated_layer{
+	  color: #e09600;
+}
+
+.form-item span.error {
+    border: 2px solid red;
+}
+
+i.fa{
+  cursor: pointer;
+}
+.jstree-anchor { height:auto !important; white-space:normal!important; }
+
+.action_links-stage {
+    height : 30px;
+    width : 100%;
+}
+.button-blue{
+    float : right;
+    border-color: #1e5c90!important;
+    background-color: #0071b8!important;
+    background-image: -webkit-linear-gradient(top, #007bc6, #0071b8)!important;
+    background-image: linear-gradient(to bottom, #007bc6, #0071b8)!important;
+    color: #fff!important;
+    text-shadow: 0 1px hsla(0, 0%, 0%, 0.5)!important;
+    font-weight: 700!important;
+    -webkit-font-smoothing: antialiased!important;
+}
+.button-blue:hover, .button-blue:focus {
+    background-color: #2369a6!important;
+    background-image: -webkit-linear-gradient(top, #0c97ed, #1f86c7)!important;
+    background-image: linear-gradient(to bottom, #0c97ed, #1f86c7)!important;
+    border-color: #1e5c90!important;
+    color: #fff!important;
+}
+.button-right{
+    float : right;
+}

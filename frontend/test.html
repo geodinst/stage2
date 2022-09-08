@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+	<title>STAGE 2</title>
+	<link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+	<link rel="stylesheet" href="lib/leaflet/controls/L.Control.ZoomBox.css" />
+	<link rel="stylesheet" href="lib/leaflet-draw/leaflet.draw.css" />
+	<link href="lib/Font-Awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="lib/jqueryui/jquery-ui.css" rel="stylesheet">
+	<link href="lib/jquery.alertable.css" rel="stylesheet">
+	<link href="css/legend.css?v=2v1" rel="stylesheet" type="text/css" />
+	<link href="css/legend-popup.css?v=rc5" rel="stylesheet" type="text/css" />
+	<link href="css/extend_leaflet.css" rel="stylesheet" type="text/css" />
+	<link href="lib/nouislider/nouislider.min.css" rel="stylesheet" />
+	<link href="css/ionicons.min.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="lib/sidebar/css/leaflet-sidebar.css" />
+	<link href="css/menu.css?v=rc5" rel="stylesheet" type="text/css" />
+	<link href="css/icons.css" rel="stylesheet" type="text/css" />
+	<link href="css/override.css" rel="stylesheet" type="text/css" />
+	<link href="lib/leaflet-geocoder/Control.Geocoder.css" rel="stylesheet" type="text/css" />
+	<link href="css/cookieconsent.min.css" rel="stylesheet" type="text/css" />
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0px;
+			padding: 0px;
+			font: 10pt "Helvetica Neue", Arial, Helvetica, sans-serif;
+		}
+
+		#mapid {
+			height: 100%
+		}
+
+		.spatialLayersSelect2 {
+			width: 300px;
+		}
+
+		fieldset.cookie-fs {
+			padding:5px;
+			border: solid #D3D3D3 1px;
+		}
+
+		fieldset.cookie-fs legend {
+			padding-left: 5px;
+			padding-right: 5px;
+			padding-top: 5px;
+		}
+	</style>
+</head>
+
+<body data-process="">
+
+    <div>
+
+    </div>
+
+	<script src="lib/leaflet/leaflet.js"></script>
+	<script src="lib/leaflet/controls/L.Control.ZoomBox.min.js"></script>
+
+	<script src="lib/leaflet-geocoder/Control.Geocoder.js"></script>
+
+	<script src="lib/leaflet-draw/Leaflet.draw.js"></script>
+	<script src="lib/leaflet-draw/Leaflet.Draw.Event.js"></script>
+	<script src="lib/leaflet-draw/Control.Draw.js"></script>
+	<script src="lib/leaflet-draw/Control.Draw.js"></script>
+
+	<script src="lib/leaflet-draw/edit/handler/Edit.Poly.js"></script>
+	<script src="lib/leaflet-draw/edit/handler/Edit.SimpleShape.js"></script>
+	<script src="lib/leaflet-draw/edit/handler/Edit.Circle.js"></script>
+	<script src="lib/leaflet-draw/edit/handler/Edit.Rectangle.js"></script>
+	<script src="lib/leaflet-draw/edit/handler/Edit.Marker.js"></script>
+
+	<script src="lib/leaflet-draw/draw/handler/Draw.Feature.js"></script>
+	<script src="lib/leaflet-draw/draw/handler/Draw.Polyline.js"></script>
+	<script src="lib/leaflet-draw/draw/handler/Draw.Polygon.js"></script>
+	<script src="lib/leaflet-draw/draw/handler/Draw.SimpleShape.js"></script>
+	<script src="lib/leaflet-draw/draw/handler/Draw.Rectangle.js"></script>
+	<script src="lib/leaflet-draw/draw/handler/Draw.Circle.js"></script>
+	<script src="lib/leaflet-draw/draw/handler/Draw.Marker.js"></script>
+
+	<script src="lib/leaflet-draw/ext/TouchEvents.js"></script>
+	<script src="lib/leaflet-draw/ext/LatLngUtil.js"></script>
+	<script src="lib/leaflet-draw/ext/GeometryUtil.js"></script>
+	<script src="lib/leaflet-draw/ext/LineUtil.Intersect.js"></script>
+	<script src="lib/leaflet-draw/ext/Polyline.Intersect.js"></script>
+	<script src="lib/leaflet-draw/ext/Polygon.Intersect.js"></script>
+
+	<script src="lib/leaflet-draw/Control.Draw.js"></script>
+	<script src="lib/leaflet-draw/Tooltip.js"></script>
+	<script src="lib/leaflet-draw/Toolbar.js"></script>
+
+	<script src="lib/leaflet-draw/draw/DrawToolbar.js"></script>
+	<script src="lib/leaflet-draw/edit/EditToolbar.js"></script>
+	<script src="lib/leaflet-draw/edit/handler/EditToolbar.Edit.js"></script>
+	<script src="lib/leaflet-draw/edit/handler/EditToolbar.Delete.js"></script>
+
+	<script src="lib/jquery-3.1.1.min.js"></script>
+	<script src="lib/notify.js"></script>
+	<script src="lib/underscore-min.js"></script>
+	<script src="lib/jquery-loading-overlay/src/loadingoverlay.min.js"></script>
+	<script src="lib/sidebar/js/leaflet-sidebar.min.js"></script>
+	<script src="lib/nouislider/nouislider.min.js"></script>
+	<script src="lib/jqueryui/jquery-ui.js"></script>
+	<script src="lib/jquery.alertable.min.js"></script>
+	<script src="lib/Chart.bundle.js"></script>
+	<script src="lib/require.js"></script>
+	<script src="lib/vmenuModule/vmenuModule.js" type="text/javascript"></script>
+	<script src="lib/cookieconsent.min.js"></script>
+
+    <script>
+        $(function() {
+            var mapUrl = 'http://localhost:8001/proxy.php?service=WMS&version=1.1.0&request=GetMap&_port=8080&layers=stage:tstage2628cd1c964aa9&styles=&bbox=1488934.4195676742,5688112.8195999535,1847533.441221423,5921963.251356396&width=1917&height=1250&srs=EPSG:900913&format_options=antialias:none&format=image%2Fpng';
+            var bordersUrl = 'http://localhost:8001/proxy.php?service=WMS&version=1.1.0&request=GetMap&_port=8080&layers=stage:tstage2628cd1c964aa9&styles=line&transparent=true&bbox=1488934.4195676742,5688112.8195999535,1847533.441221423,5921963.251356396&width=1917&height=1250&srs=EPSG:900913&format_options=antialias:none&format=image%2Fpng';
+
+			var imageObj = new Image();
+
+            const width=1917;
+            const height=1250;
+
+            var canvas = document.getElementById("canvas");
+            var mapCtx = canvas.getContext("2d");
+            canvas.width = width;
+			canvas.height = height;
+
+            const borderObj = new Image();
+
+            borderObj.onload=function() {
+                mapCtx.drawImage(this,0,0)
+            }
+	
+			imageObj.onload = function() {	
+				mapCtx.drawImage(this, 0,0);
+                borderObj.src = bordersUrl;
+            }
+				
+			imageObj.src = mapUrl;
+        });
+    </script>
+    <canvas id="canvas"></canvas>
+</body>
+
+
+</html>

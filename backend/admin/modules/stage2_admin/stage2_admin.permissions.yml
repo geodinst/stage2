@@ -1,0 +1,9 @@
+'stage2_admin content_administrator':
+  title: 'stage2_admin content_administrator'
+  description: 'Administer stage content.'
+  restrict access: true
+
+'stage2_admin restricted_content_administrator':
+  title: 'stage2_admin RESTRICTED content_administrator'
+  description: "Administer stage content - delete and edit operation are limited to this user's data only."
+  restrict access: true

@@ -1,0 +1,271 @@
+# COORDINATE SYSTEMS
+
+stage2_admin.realContent:
+    path: /stage_settings
+    defaults:
+        _controller: Drupal\stage2_admin\Controller\StageSettingsController::realContent
+        _title: 'Settings'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.coordinateSystemDelete:
+    path: '/stage_settings/delete/{id}'
+    defaults:
+       _form: 'Drupal\stage2_admin\Form\StageCoordinateSystemDeleteForm'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.coordinateSystemEdit:
+    path: '/stage_settings/edit/{id}'
+    defaults:
+       _form: 'Drupal\stage2_admin\Form\StageCoordinateSystemEditForm'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+# COORDINATE SPATIAL UNITS
+
+stage2_admin.coordinateSpatialUnitsEdit:
+    path: '/stage_settings/spatial_units/edit/{id}'
+    defaults:
+       _form: 'Drupal\stage2_admin\Form\StageCoordinateSpatialUnitsEditForm'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.coordinateSpatialUnitsDelete:
+    path: '/stage_settings/spatial_units/delete/{id}'
+    defaults:
+       _form: 'Drupal\stage2_admin\Form\StageCoordinateSpatialUnitsDeleteForm'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+# GEOSPATIAL LAYERS
+
+stage2_admin.StageGeospatialLayerEdit:
+  path: /geospatial_layers/geospatial_layer/{id}
+  defaults:
+    _controller: Drupal\stage2_admin\Controller\StageGeospatialLayerEditController::init
+  requirements:
+    _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.geospatialLayers:
+    path: /geospatial_layers
+    defaults:
+        _controller: Drupal\stage2_admin\Controller\StageGeospatialLayersController::init
+        _title: 'Geospatial layers'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.StageGeospatialLayerEditForm:
+    path: '/geospatial_layers/edit/{id}'
+    defaults:
+        _form: 'Drupal\stage2_admin\Form\StageGeospatialLayerEditForm'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.geospatialLayersDelete:
+    path: '/geospatial_layers/delete/{id}'
+    defaults:
+        _form: Drupal\stage2_admin\Form\StageGeospatialLayersDeleteForm
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.largeFileUpload:
+    path: '/large_upload'
+    defaults:
+        _controller: Drupal\stage2_admin\Upload\Stage2UploadController::init
+    requirements:
+      _permission: 'access content'
+
+# MENU TREE EDITOR
+stage2_admin.menuTree:
+    path: /menu_tree
+    defaults:
+        _controller: Drupal\stage2_admin\Controller\StageMenuTreeController::init
+        _title: 'Menu tree'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.menuTreeEdit:
+    path: /menu_tree/edit/{id}
+    defaults:
+        _form: Drupal\stage2_admin\Form\StageMenuTreeAddForm
+        _title: 'Menu tree editor'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.menuTreeDelete:
+    path: '/menu_tree/delete/{id}'
+    defaults:
+       _form: 'Drupal\stage2_admin\Form\StageMenuTreeDeleteForm'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+# BATCH IMPORT
+
+stage2_admin.batchImport:
+    path: /variables/batchimport
+    defaults:
+        _controller: Drupal\stage2_admin\Controller\StageBatchImportController::init
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.batchImportPX:
+    path: /variables/batchimportPX
+    defaults:
+        _controller: Drupal\stage2_admin\Controller\StageBatchImportController::initPX
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.batchImportForm:
+    path: '/variables/batchimport/edit/{id}'
+    defaults:
+        _form: 'Drupal\stage2_admin\Form\StageBatchImportForm'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+# VARIABLES
+
+stage2_admin.variables:
+    path: /variables
+    defaults:
+        _controller: Drupal\stage2_admin\Controller\StageVariablesController::init
+        _title: 'Variables'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.variablesUpdatePX:
+    path: /variables/update
+    defaults:
+        _controller: Drupal\stage2_admin\Controller\StageVariablesUpdateController::init
+    requirements:
+        _permission: 'stage2_admin content_administrator'
+
+stage2_admin.variablesReport:
+    path: /variables/report/{id}
+    defaults:
+        _form: Drupal\stage2_admin\Form\StageVariablesReportForm
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+stage2_admin.variablesReportINSPIRE:
+    path: /variables/reportinspire/{inspire}
+    defaults:
+        _form: Drupal\stage2_admin\Form\StageVariablesReportINSPIREForm
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.variablesUpdatePxUrl:
+    path: /variables/update/{url}
+    defaults:
+        _form: Drupal\stage2_admin\Form\StageVariablesUpdatePxUrl
+    requirements:
+        _permission: 'stage2_admin content_administrator'
+
+stage2_admin.variablesEdit:
+    path: '/variables/edit/{id}'
+    defaults:
+        _form: Drupal\stage2_admin\Form\StageVariablesEditForm
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.variableDatesList:
+    path: '/variables/update/report/{id}'
+    defaults:
+        _form: Drupal\stage2_admin\Form\StageVariableDatesList
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.variablesPublish:
+    path: '/variables/publish/{id}'
+    defaults:
+        _form: Drupal\stage2_admin\Form\StageVariablesPublishForm
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+stage2_admin.StageVariableDeleteForm:
+    path: '/variables/delete/{id}'
+    defaults:
+       _form: 'Drupal\stage2_admin\Form\StageVariableDeleteForm'
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+# REPORTS e.g. Import reports
+stage2_admin.reports:
+  path: /reports
+  defaults:
+    _controller: Drupal\stage2_admin\Controller\StageReportsController::init
+  requirements:
+  _permission: 'stage2_admin content_administrator'
+
+  stage2_admin.reportsEdit:
+    path: '/reports/report'
+  defaults:
+    _form: Drupal\stage2_admin\Form\StageReportsForm
+  requirements:
+    _permission: 'stage2_admin content_administrator'
+
+# SETTINGS e.g. UX translations & advanced settings
+stage2_admin.client:
+  path: /clientset
+  defaults:
+    _controller: Drupal\stage2_admin\Controller\StageAdvancedSettingsController::init
+  requirements:
+    _permission: 'administrator'
+
+stage2_admin.clientsettings:
+  path: '/clientset/advanced'
+  defaults:
+    _form: Drupal\stage2_admin\Form\StageAdvancedSettingsForm
+  requirements:
+    _permission: 'administrator'
+
+stage2_admin.clientsettings:
+  path: '/clientset/settings'
+  defaults:
+    _form: Drupal\stage2_admin\Form\StageClientSettingsForm
+  requirements:
+    _permission: 'stage2_admin content_administrator'
+
+stage2_admin.clientsettings:
+  path: '/clientset/settings'
+  defaults:
+    _form: Drupal\stage2_admin\Form\StageLandingPageForm
+  requirements:
+    _permission: 'stage2_admin content_administrator'
+
+# POST REDIRECT
+stage2_admin.postRedirect:
+    path: /post_redirect
+    defaults:
+        _controller: Drupal\stage2_admin\Controller\StagePostRedirectController::init
+    requirements:
+        _permission: 'stage2_admin content_administrator+stage2_admin restricted_content_administrator'
+
+# translations
+stage2_admin.stagetranslations:
+  path: /stagetranslations
+  defaults:
+    _controller: Drupal\stage2_admin\Controller\StageTranslationsController::init
+    _title: 'Translations'
+  requirements:
+    _permission: 'stage2_admin content_administrator'
+
+stage2_admin.stagetranslationsEdit:
+  path: '/stagetranslations/translations'
+  defaults:
+    _form: Drupal\stage2_admin\Form\StageTranslationsForm
+  requirements:
+    _permission: 'stage2_admin content_administrator'
+
+stage2_admin.stageflushconfirmform:
+    path: '/variables/stageflushconfirmform'
+    defaults:
+       _form: 'Drupal\stage2_admin\Form\StageFlushConfirmForm'
+    requirements:
+        _permission: 'stage2_admin content_administrator'
+
+#stage2_admin.realContent2:
+#    path: '/stage_settings2'
+#    defaults:
+#        _form: 'Drupal\stage2_admin\Form\StageCoordinateSystemForm'
+#    requirements:
+#        _permission: 'access content'

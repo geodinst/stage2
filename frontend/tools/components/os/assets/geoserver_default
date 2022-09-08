@@ -1,0 +1,6 @@
+USER=geoserver
+GEOSERVER_DATA_DIR=/opt/_uid/data_dir
+GEOSERVER_HOME=/opt/_uid
+JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/jre
+DAEMON="$JAVA_HOME/bin/java"
+JAVA_OPTS="-Xms640m -Xmx1280m"
